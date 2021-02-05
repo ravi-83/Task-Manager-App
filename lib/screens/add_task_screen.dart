@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/tasks/task_data.dart';
 
 
-class AddTaskScreen extends StatelessWidget {
+class AddTaskScreen extends StatefulWidget {
+  @override
+  _AddTaskScreenState createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  final textField=TextEditingController();
+  bool isNull=false;
+  String textValue;
+  final _text = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -26,21 +39,40 @@ class AddTaskScreen extends StatelessWidget {
             ),
 
             TextField(
+
               autofocus: true,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-
+                //labelText: 'Enter the Value',
+                errorText: isNull ? 'Value Can\'t Be Empty' : null,
               ),
-              onChanged: (value){
+
+              onChanged: (newText){
+                //print(newText);
+               textValue=newText;
+
               },
+
             ),
             SizedBox(height: 20,),
             FlatButton(
               color: Colors.lightBlueAccent,
               onPressed: (){
+                if(textValue== null){
+                  setState(() {
+                    _text.text.isEmpty ? isNull = true : isNull = false;
+                  });
 
+                }else {
+                  var counter = context.read<TaskData>();
+                  // if(textValue==null){
+                  //
+                  // }
 
-
+                  counter.addTask(textValue);
+                  textField.clear();
+                  Navigator.pop(context);
+                }
               },
               height: 50,
               child: Text(
